@@ -1,6 +1,6 @@
 # Hypergradient-Descent
-###### Course Project: Machine Learning & Optimization (Fall-2021)
-######## Group: Mohbat Tharani, Momin Abbas, Huzaifa Arif, Tobia Park, Xinyan Sun
+##### Course Project: Machine Learning & Optimization (Fall-2021)
+###### Group: Mohbat Tharani, Momin Abbas, Huzaifa Arif, Tobia Park, Xinyan Sun
 
 
 
