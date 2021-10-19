@@ -58,36 +58,53 @@ def train (model, train_loader, optimizer, criterion, epochs, test_freq = 1):
         test_loss, test_acc = test (model, test_loader)
         
         logs ["epoch"].append (epoch)
-        logs ["lr"].append (optimizer.lr.item())
+        try:
+            logs ["lr"].append (optimizer.lr.item())
+        except:
+            logs ["lr"].append (optimizer.lr)
+
         logs ["train_loss"].append (loss.item())
         logs ["test_loss"].append (test_loss.item())
         logs ["test_acc"].append (test_acc.item())
         
     return logs
         
-              
-    #print("Iteration: {}. lr: {}, Loss: {}. Accuracy: {}.".format(i, optimizer.lr,  loss.item(), accuracy))
+
 
 
 
 # Initialize constants
-batch_size = 2
+batch_size = 16
 input_dim = 784
 output_dim = 10
 lr = 0.1
 beta = 0.0001
+epoch = 2
+
+
+models = ['LogisticRegression']
+opt_names = ['sgd', 'sgdhd']
+dataset_names = ['mnist']
 
 # Instantiate Loss Class
 criterion = torch.nn.CrossEntropyLoss() # computes softmax and then the cross entropy
 
-model = LogisticRegression(input_dim, output_dim)
-criterion = torch.nn.CrossEntropyLoss() 
-sgdhd = SGDHD (model, lr, beta)
-sgd = SGD (model, lr)
-epoch = 2
+for dataset_name in dataset_names:
+    if (dataset_name == 'mnist'):
+        train_loader, test_loader = mnist()
+    criterion = torch.nn.CrossEntropyLoss() 
 
-train_loader, test_loader = mnist()
-logs = train (model, train_loader, sgdhd, criterion, epoch)
-print ("logs:", logs["test_loss"])
-save_plot (logs, 'LogisticRegression')
-save_csv (logs, 'LogisticRegression')
+    for m in models:
+        for opt_name in opt_names:
+            if m == 'LogisticRegression':
+                model = LogisticRegression(input_dim, output_dim)
+            if (opt_name == 'sgd'):
+                opt = SGD (model, lr)
+            else:
+                opt = SGDHD (model, lr, beta)
+            
+            logs = train (model, train_loader, opt, criterion, epoch)
+            log_name =  m+'_'+opt_name+'_'+dataset_name
+            print ("Logname:", log_name)
+            save_plot (logs, log_name)
+            save_csv (logs, log_name)
