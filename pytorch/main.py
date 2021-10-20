@@ -2,24 +2,12 @@
 
 import torch
 from torch.autograd import Variable
-import torchvision.transforms as transforms
 from torchvision import datasets
 
 from models import LogisticRegression
-from optimizers import SGD, SGDHD
+from optimizers import SGD, SGDHD, SGDNHD, SGDN
 from tqdm import tqdm
-from util import save_plot, save_csv
-
-# Load Dataset
-
-def mnist ():
-    train_dataset = datasets.MNIST(root='./data', train=True, transform=transforms.ToTensor(), download=True)
-    test_dataset = datasets.MNIST(root='./data', train=False, transform=transforms.ToTensor())
-    # Make Dataset Iterable
-    train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
-
-    return train_loader, test_loader
+from util import save_plot, save_csv, data_loader
 
 
 def test (model, test_loader):
@@ -71,40 +59,47 @@ def train (model, train_loader, optimizer, criterion, epochs, test_freq = 1):
         
 
 
-
-
 # Initialize constants
 batch_size = 16
-input_dim = 784
-output_dim = 10
-lr = 0.1
-beta = 0.0001
-epoch = 2
+input_dim = 28 * 28
+#{'mnist': (28,28, 1),
+#             'cifar10': (32,32,,3) }
 
+output_dim = 10
+lr = 0.0001
+beta = 0.0001
+epoch = 5
+momentum = 0.5
 
 models = ['LogisticRegression']
-opt_names = ['sgd', 'sgdhd']
-dataset_names = ['mnist']
+opt_names = ['sgd', 'sgdhd', 'sgdn', 'sgdnhd']
+dataset_names = ['mnist'] # ['mnist', 'cifar10']
 
 # Instantiate Loss Class
 criterion = torch.nn.CrossEntropyLoss() # computes softmax and then the cross entropy
 
 for dataset_name in dataset_names:
-    if (dataset_name == 'mnist'):
-        train_loader, test_loader = mnist()
+    train_loader, test_loader = data_loader (batch_size, dataset_name) #mnist()
     criterion = torch.nn.CrossEntropyLoss() 
 
     for m in models:
         for opt_name in opt_names:
-            if m == 'LogisticRegression':
-                model = LogisticRegression(input_dim, output_dim)
+            if m == 'LogisticRegression': 
+                model = LogisticRegression( input_dim, output_dim)
             if (opt_name == 'sgd'):
                 opt = SGD (model, lr)
-            else:
+            elif (opt_name == 'sgdhd'):
                 opt = SGDHD (model, lr, beta)
+            elif (opt_name == 'sgdn'):
+                opt = SGDN (model, lr, momentum)
+            elif (opt_name == 'sgdnhd'):
+                opt = SGDNHD (model, lr, beta, momentum)
+            else:
+                print ("Error: Please select proper optimizer.")
+                exit()
             
-            logs = train (model, train_loader, opt, criterion, epoch)
             log_name =  m+'_'+opt_name+'_'+dataset_name
             print ("Logname:", log_name)
+            logs = train (model, train_loader, opt, criterion, epoch)
             save_plot (logs, log_name)
             save_csv (logs, log_name)
