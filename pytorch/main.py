@@ -68,12 +68,14 @@ input_dim = 28 * 28
 output_dim = 10
 lr = 0.0001
 beta = 0.0001
-epoch = 5
+epoch = 100
 momentum = 0.5
 
 models = ['LogisticRegression']
 opt_names = ['sgd', 'sgdhd', 'sgdn', 'sgdnhd']
 dataset_names = ['mnist'] # ['mnist', 'cifar10']
+
+all_logs = {}
 
 # Instantiate Loss Class
 criterion = torch.nn.CrossEntropyLoss() # computes softmax and then the cross entropy
