@@ -27,9 +27,8 @@ class LogReg(nn.Module):
 
 
 class MLP(nn.Module):
-    def __init__(self, input_dim, output_dim):
+    def __init__(self, input_dim, output_dim, hidden_dim = 1000):
         super(MLP, self).__init__()
-        hidden_dim = 32
         self._input_dim = input_dim
         self.lin1 = nn.Linear(input_dim, hidden_dim)
         self.lin2 = nn.Linear(hidden_dim, hidden_dim)

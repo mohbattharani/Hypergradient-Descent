@@ -108,8 +108,110 @@ class SGDNHD ():
            param.grad.zero_()
 
 
+class Adam ():
+    def __init__(self, model, lr, beta, b1, b2, eps):
+        self.model = model
+        self.lr = lr 
+        self.lr_global = copy.deepcopy (lr) 
+        self.prev_grad = None
+        self.beta = beta
+        self.b1 = b1 
+        self.b2 = b2
+        self.eps = eps
+        self.t = 0
+        for param in self.model.parameters():
+          param.velocity=None
+          param.momentum=None
+
+    # Adam
+    def step (self):
+        self.t += 1   # verified from code
+
+        for param in self.model.parameters():   
+          g_t = param.grad.data
+          
+          if (param.velocity is None):
+            param.velocity =  torch.zeros_like (g_t)
+          if (param.momentum is None):
+            param.momentum =  torch.zeros_like (g_t)
+
+          param.momentum = torch.mul(self.b1 , param.momentum) + torch.mul ((1- self.b1) , g_t )
+          param.velocity = torch.mul(self.b2, param.velocity)  + (1-self.b2) * torch.square(g_t)
+
+          momentum_bias = param.momentum/(1-pow(self.b1, self.t)) 
+          velocity_bias = param.velocity/(1-pow(self.b2, self.t)) 
+
+          u_t = - (self.lr/(math.sqrt(self.t))) * (momentum_bias)/(torch.sqrt(velocity_bias) + self.eps)
+          param.data = param.data + u_t
+        
+        for param in self.model.parameters():
+          param.grad.zero_()
+
+
+
 
 class AdamHD ():
+    def __init__(self, model, lr, beta, b1, b2, eps):
+        self.model = model
+        self.lr = lr 
+        self.lr_global = copy.deepcopy (lr) 
+        self.prev_grad = None
+        self.beta = beta
+        self.b1 = b1 
+        self.b2 = b2
+        self.eps = eps
+        self.t = 0
+        for param in self.model.parameters():
+          param.velocity=None
+          param.momentum=None
+
+    # Adam-HD
+    def step (self):
+        grads = []
+        grads_ut = []
+        self.t = 1   # verified from code
+
+        for param in self.model.parameters():   
+          g_t = param.grad.data
+          
+          if (param.velocity is None):
+            param.velocity =  torch.zeros_like (g_t)
+          if (param.momentum is None):
+            param.momentum =  torch.zeros_like (g_t)
+
+          param.momentum = torch.mul(self.b1 , param.momentum) + torch.mul ((1- self.b1) , g_t )
+          param.velocity = torch.mul(self.b2, param.velocity)  + (1-self.b2) * torch.square(g_t)
+
+          momentum_bias = param.momentum/(1-pow(self.b1, self.t)) 
+          velocity_bias = param.velocity/(1-pow(self.b2, self.t)) 
+
+          u_t = - (self.lr/(math.sqrt(self.t))) * (momentum_bias)/(torch.sqrt(velocity_bias) + self.eps)
+
+          grad_alpha_ut= -1 * (momentum_bias)/(torch.sqrt(velocity_bias) + self.eps)
+          param.data = param.data + u_t
+        
+          grads.append (g_t.view (-1))
+          grads_ut.append (grad_alpha_ut.view (-1))
+          
+        grads = torch.cat (grads, 0)
+        grads_ut = torch.cat (grads_ut, 0)
+
+        if (self.prev_grad is None):
+          self.prev_grad = torch.zeros_like (grads)
+          
+        h_t = torch.dot (grads, self.prev_grad)
+        self.lr = self.lr - self.beta * h_t
+        self.prev_grad = grads_ut
+
+        for param in self.model.parameters():
+          param.grad.zero_()
+
+
+
+
+## COPY provided by huzaifa
+
+class AdamHD2 ():
     def __init__(self, model, lr, beta, b1, b2, eps):
         self.model = model
         self.lr = lr 
@@ -180,67 +282,3 @@ class AdamHD ():
 
       self.grad_prev=torch.cat(grad_prev, 0)
 
-
-class AdamHD2 ():
-    def __init__(self, model, lr, beta, b1, b2, eps):
-        self.model = model
-        self.lr = lr 
-        self.lr_global = copy.deepcopy (lr) 
-        self.prev_grad = None
-        self.beta = beta
-        self.b1 = b1 
-        self.b2 = b2
-        self.eps = eps
-        self.t = 0
-        for param in self.model.parameters():
-          param.velocity=None
-          param.momentum=None
-
-    # Adam-HD
-    def step (self):
-        grads = []
-        grads_ut = []
-        self.t = 1   # verified from code
-
-        for param in self.model.parameters():   
-          g_t = param.grad.data
-          grads.append (g_t.view (-1))
-
-        grads = torch.cat (grads, 0)
-        
-        if (self.prev_grad is None):
-          self.prev_grad = torch.zeros_like (grads)
-        
-        h_t = torch.dot (grads, self.prev_grad)
-        self.lr = self.lr + self.beta * h_t
-
-        for param in self.model.parameters():   
-          g_t = param.grad.data
-          
-          if (param.velocity is None):
-            param.velocity =  torch.zeros_like (g_t)
-          if (param.momentum is None):
-            param.momentum =  torch.zeros_like (g_t)
-
-          param.momentum = torch.mul(self.b1 , param.momentum) + torch.mul ((1- self.b1) , g_t )
-          param.velocity = torch.mul(self.b2, param.velocity)  + (1-self.b2) * torch.square(g_t)
-
-          momentum_bias = param.momentum/(1-pow(self.b1, self.t)) 
-          velocity_bias = param.velocity/(1-pow(self.b2, self.t)) 
-
-          u_t = - (self.lr/(math.sqrt(self.t))) * (momentum_bias)/(torch.sqrt(velocity_bias) + self.eps)
-
-          grad_alpha_ut= -1 * (momentum_bias)/(torch.sqrt(velocity_bias) + self.eps)
-          param.data = param.data + u_t
-        
-          
-          grads_ut.append (grad_alpha_ut.view (-1))
-          
-        grads_ut = torch.cat (grads_ut, 0)
-
-
-        
-
-        self.prev_grad = grads_ut
-        for param in self.model.parameters():
-           param.grad.zero_()
