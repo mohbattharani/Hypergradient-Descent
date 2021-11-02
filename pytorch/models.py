@@ -2,6 +2,23 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
+def select_model (model_name, input_dim, output_dim):
+    if (model_name == 'mlp'):
+        model = MLP(input_dim, output_dim)
+    elif model_name == "LogisticRegression":
+        model = LogReg( input_dim, output_dim)
+    
+    else:
+        print ("Error!: Model not available. Please select right model name.")
+        print ("Available models: mlp, LogisticRegression")
+        return None
+
+    return model.to (device)
+
+
 # Create Model Class
 class LogisticRegression(torch.nn.Module):
     def __init__(self, input_dim, output_dim):
