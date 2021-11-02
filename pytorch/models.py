@@ -13,9 +13,9 @@ def select_model (model_name, input_dim, output_dim):
         model = LogReg( input_dim, output_dim)
     elif model_name == "vgg":
         model = VGG()
-    elif model_name == "Resnet18"
+    elif model_name == "Resnet18":
         model = Resnet18()
-    elif model_name == "WideResnet"
+    elif model_name == "WideResnet":
         model = WideResnet()
         
     else:
