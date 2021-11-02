@@ -20,7 +20,7 @@ def select_model (model_name, input_dim, output_dim):
         
     else:
         print ("Error!: Model not available. Please select right model name.")
-        print ("Available models: mlp, LogisticRegression,VGG")
+        print ("Available models: mlp, LogisticRegression,VGG,Resnet18,WideResnet")
         return None
 
     return model.to (device)
