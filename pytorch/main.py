@@ -17,31 +17,43 @@ def test (model, test_loader):
     total_loss = 0
     for images, labels in test_loader:
         images = images.to(device)
+        labels = labels.to(device)
         outputs = model(images)
+        #print ( images.is_cuda, outputs.is_cuda, labels.is_cuda)
+        
         total_loss += criterion(outputs, labels)
         _, predicted = torch.max(outputs.data, 1)
-        if (torch.cuda.is_available()):
-            predicted = predicted.detach().cpu()
+        #if (torch.cuda.is_available()):
+        #    predicted = predicted.detach().cpu()
+      
+        #print (predidcted.get_device(), labels.get_device())
+
         correct+= (predicted == labels).sum()
         total+= labels.size(0)
         
     accuracy = 100 * correct/total
     
+    if (total_loss.is_cuda):
+        total_loss = total_loss.detach().cpu()
+    if (accuracy.is_cuda):
+        accuracy = accuracy.detach().cpu()    
+
     return total_loss, accuracy
 
 def train (model, train_loader, optimizer, criterion, epochs, test_freq = 1):
     test_loss, test_acc = test (model, test_loader)
     train_loss, train_acc = test (model, train_loader)
     logs = {
-        "train_loss": [train_loss],
-        "test_loss" : [test_loss],
-        "test_acc": [test_acc],
+        "train_loss": [train_loss.detach().cpu().numpy() if train_loss.is_cuda else train_loss.item() ],
+        "test_loss" : [test_loss.detach().cpu().numpy() if test_loss.is_cuda else test_loss.item()],
+        "test_acc": [test_acc.detach().cpu().numpy() if test_acc.is_cuda else test_acc.item()],
         "epoch": [0],
         "lr": [lr]
     }
     for epoch in tqdm (range(epochs)):
         for i, (images, labels) in enumerate(train_loader):
             images = images.to(device)
+            labels = labels.to(device)
             labels = Variable(labels).to(device)
             outputs = model(images)
             loss = criterion(outputs, labels)
@@ -51,15 +63,16 @@ def train (model, train_loader, optimizer, criterion, epochs, test_freq = 1):
         #if (epoch%test_freq == 0):
         test_loss, test_acc = test (model, test_loader)
         
+    
         logs ["epoch"].append (epoch)
         try:
-            logs ["lr"].append (optimizer.lr.item())
+            logs ["lr"].append (optimizer.lr.detach().cpu() if optimizer.lr.is_cuda else optimizer.lr)
         except:
             logs ["lr"].append (optimizer.lr)
 
-        logs ["train_loss"].append (loss.item())
-        logs ["test_loss"].append (test_loss.item())
-        logs ["test_acc"].append (test_acc.item())
+        logs ["train_loss"].append (loss.detach().cpu().numpy() if loss.is_cuda else loss.item())
+        logs ["test_loss"].append (test_loss.detach().cpu() if test_loss.is_cuda else test_loss.item())
+        logs ["test_acc"].append (test_acc.detach().cpu() if test_acc.is_cuda else test_acc.item())
         
     return logs
         
