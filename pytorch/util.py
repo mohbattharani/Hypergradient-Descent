@@ -36,20 +36,49 @@ def save_csv (logs, model_name, folder ='results'):
     df.to_csv(os.path.join( save_path, model_name+'.csv'))
     
 
-def data_loader (batch_size, name= 'mnist'):
-    if (name == 'cifar10'):
-        return cifar10(batch_size)
-    else:
-        return mnist (batch_size)
+def data_loader (batch_size, dataset_name, image_size = None):
     
-def cifar10 (batch_size,  transform=transforms.ToTensor()):
-    train_dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    test_dataset = datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+    name = dataset_name["name"]
+    image_size =  dataset_name['image_size']
+
+    if (name == 'cifar10'):
+        return cifar10(batch_size, image_size = image_size)
+    else:
+        return mnist (batch_size, image_size = image_size)
+    
+def cifar10 (batch_size,  image_size = 32):
+    # https://github.com/bentrevett/pytorch-image-classification/blob/master/4_vgg.ipynb
+    means = [0.485, 0.456, 0.406]
+    stds= [0.229, 0.224, 0.225]
+    if (image_size == None):
+        image_size = 32
+    train_transforms = transforms.Compose([
+                            transforms.Resize(image_size),
+                            transforms.RandomRotation(5),
+                            transforms.RandomHorizontalFlip(0.5),
+                            transforms.RandomCrop(image_size, padding = 10),
+                            transforms.ToTensor(),
+                            transforms.Normalize(mean = means, std = stds)
+                        ])
+
+    test_transforms = transforms.Compose([
+                           transforms.Resize(image_size),
+                           transforms.ToTensor(),
+                           transforms.Normalize(mean = means, std = stds) 
+                        ])
+
+    train_dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transforms)
+    test_dataset = datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transforms)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size,shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     return train_loader, test_loader
 
-def mnist (batch_size, transform=transforms.ToTensor()):
+
+
+def mnist (batch_size, image_size = 28):
+    transform=transforms.ToTensor()
+    if (image_size == None):
+        image_size = 28
     train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
     test_dataset = datasets.MNIST(root='./data', train=False, transform=transform)
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)

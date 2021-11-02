@@ -2,10 +2,11 @@
 
 import torch
 from torch.autograd import Variable
+import torchvision.transforms as transforms
+from tqdm import tqdm
 
 import models
 from optimizers import *
-from tqdm import tqdm
 from util import save_plot, save_csv, data_loader
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -79,7 +80,7 @@ def train (model, train_loader, optimizer, criterion, epochs, test_freq = 1):
 
 
 # Initialize constants
-batch_size = 16
+batch_size = 1
 output_dim = 10
 lr = 0.0001
 beta = 0.0001
@@ -89,27 +90,27 @@ b1=0.9
 b2=0.999
 eps=10**-8
 
-model_ames = ['LogisticRegression', 'mlp'] #['mlp', 'LogisticRegression']
+model_ames = ['vgg'] # ['LogisticRegression', 'mlp'] #['mlp', 'LogisticRegression']
 opt_names = ['sgd',]#['sgd', 'sgdhd', 'sgdn', 'sgdnhd', 'adam', 'adamhd']
-datasets = [{'name':'mnist', 'input_dim': 28*28}, 
+dataset_names = [{'name':'mnist', "image_size": 28,'input_dim': 28*28}, 
             {'name':'cifar10', 'input_dim': 32*32*3}, 
             ] 
-datasets = [{'name':'mnist', 'input_dim': 28*28}]
+dataset_names = [{'name':'cifar10', "image_size": 214, 'input_dim': 32*32*3}]
 
 all_logs = {}
 
 # Instantiate Loss Class
 criterion = torch.nn.CrossEntropyLoss() # computes softmax and then the cross entropy
 
-for dataset in datasets:
+for dataset_name in dataset_names:
     
-    train_loader, test_loader = data_loader (batch_size, dataset["name"]) #mnist()
+    train_loader, test_loader = data_loader (batch_size, dataset_name) #mnist()
     criterion = torch.nn.CrossEntropyLoss() 
 
     for model_name in model_ames:
         model_logs = {}
         for opt_name in opt_names:
-            model = models.select_model(model_name,  dataset["input_dim"], output_dim)
+            model = models.select_model(model_name,  dataset_name["input_dim"], output_dim)
 
             if (opt_name == 'sgd'):
                 opt = SGD (model, lr)
@@ -127,15 +128,15 @@ for dataset in datasets:
                 print ("Error: Please select proper optimizer.")
                 exit()
             
-            log_name =  dataset["name"] +'_' + model_name +'_'+opt_name
+            log_name =  dataset_name["name"] +'_' + model_name +'_'+opt_name
             print ("Logname:", log_name)
             logs = train (model, train_loader, opt, criterion, epoch)
             save_plot (logs, log_name)
             save_csv (logs, log_name)
             model_logs [opt_name+'_test_loss'] = logs['test_loss']
         
-        save_plot (model_logs, dataset["name"] + model_name)
-        save_csv (model_logs, dataset["name"] + model_name)
+        save_plot (model_logs, dataset_name["name"] + model_name)
+        save_csv (model_logs, dataset_name["name"] + model_name)
             
         
         

@@ -10,7 +10,9 @@ def select_model (model_name, input_dim, output_dim):
         model = MLP(input_dim, output_dim)
     elif model_name == "LogisticRegression":
         model = LogReg( input_dim, output_dim)
-    
+    elif model_name == "vgg":
+        model = VGG()
+        
     else:
         print ("Error!: Model not available. Please select right model name.")
         print ("Available models: mlp, LogisticRegression")
@@ -57,3 +59,9 @@ class MLP(nn.Module):
         x = F.relu(self.lin2(x))
         x = self.lin3(x)
         return x
+
+def VGG ():
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'vgg11', pretrained=False)
+    return model
+    
+
