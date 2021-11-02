@@ -96,16 +96,16 @@ class CNN(nn.Module):
 
 
 def VGG ():
-    model_v = models.vgg16( pretrained=False)
-    return model_v
+    model = models.vgg16( pretrained=False)
+    return model
 
 def Resnet18():
-    model_r = models.resnet18(pretrained=False)
-    return model_r
+    model = models.resnet18(pretrained=False)
+    return model
     
 def WideResnet():
-    model_w = models.wide_resnet50_2(pretrained=False)
-    return model_w
+    model = models.wide_resnet50_2(pretrained=False)
+    return model
 
 
     
