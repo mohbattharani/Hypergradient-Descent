@@ -1,6 +1,7 @@
 import torch 
 import torch.nn.functional as F
 import torch.nn as nn
+import torchvision.models as models
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -15,9 +16,14 @@ def select_model (model_name, input_dim, output_dim):
     elif model_name == "vgg":
         model = VGG()
 
+    elif model_name == "Resnet18":
+        model = Resnet18()
+    elif model_name == "WideResnet":
+        model = WideResnet()
+        
     else:
         print ("Error!: Model not available. Please select right model name.")
-        print ("Available models: mlp, LogisticRegression")
+        print ("Available models: mlp, LogisticRegression,VGG,Resnet18,WideResnet")
         return None
 
     return model.to (device)
@@ -90,7 +96,18 @@ class CNN(nn.Module):
 
 
 def VGG ():
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'vgg11', pretrained=False)
-    return model
+    model_v = models.vgg16( pretrained=False)
+    return model_v
+
+def Resnet18():
+    model_r = models.resnet18(pretrained=False)
+    return model_r
     
+def WideResnet():
+    model_w = models.wide_resnet50_2(pretrained=False)
+    return model_w
+
+
+    
+
 
