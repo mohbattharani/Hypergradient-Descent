@@ -39,7 +39,7 @@ def save_csv (logs, model_name, folder ='results'):
 def data_loader (batch_size, dataset_name, image_size = None):
     
     name = dataset_name["name"]
-    image_size =  dataset_name['image_size']
+    image_size =  dataset_name['input_dim'][-1]
 
     if (name == 'cifar10'):
         return cifar10(batch_size, image_size = image_size)
