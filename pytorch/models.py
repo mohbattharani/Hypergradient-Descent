@@ -1,6 +1,7 @@
 import torch 
 import torch.nn.functional as F
 import torch.nn as nn
+import torchvision.models as models
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -61,7 +62,7 @@ class MLP(nn.Module):
         return x
 
 def VGG ():
-    model = torch.hub.load('pytorch/vision:v0.10.0', 'vgg11', pretrained=False)
+    model = models.vgg16( pretrained=False)
     return model
     
 
