@@ -13,10 +13,14 @@ def select_model (model_name, input_dim, output_dim):
         model = LogReg( input_dim, output_dim)
     elif model_name == "vgg":
         model = VGG()
+    elif model_name == "Resnet18"
+        model = Resnet18()
+    elif model_name == "WideResnet"
+        model = WideResnet()
         
     else:
         print ("Error!: Model not available. Please select right model name.")
-        print ("Available models: mlp, LogisticRegression")
+        print ("Available models: mlp, LogisticRegression,VGG")
         return None
 
     return model.to (device)
@@ -62,7 +66,18 @@ class MLP(nn.Module):
         return x
 
 def VGG ():
-    model = models.vgg16( pretrained=False)
-    return model
+    model_v = models.vgg16( pretrained=False)
+    return model_v
+
+def Resnet18():
+    model_r = models.resnet18(pretrained=False)
+    return model_r
     
+def WideResnet():
+    model_w = models.wide_resnet50_2(pretrained=False)
+    return model_w
+
+
+    
+
 
