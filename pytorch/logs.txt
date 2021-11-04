@@ -1,0 +1,6 @@
+Logname: mnist_cnn_sgd
+Logname: mnist_cnn_sgdhd
+Logname: mnist_cnn_sgdn
+Logname: mnist_cnn_sgdnhd
+Logname: mnist_cnn_adam
+Logname: mnist_cnn_adamhd

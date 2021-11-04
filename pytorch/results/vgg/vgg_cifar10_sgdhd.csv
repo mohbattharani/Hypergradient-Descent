@@ -1,0 +1,4 @@
+,train_loss,test_loss,test_acc,epoch,lr
+0,2699.742919921875,545.5654907226562,0.28999999165534973,0,0.0001
+1,nan,,10.0,0,tensor(nan)
+2,nan,,10.0,1,tensor(nan)

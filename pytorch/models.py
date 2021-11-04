@@ -16,7 +16,7 @@ def select_model (model_name, input_dim, output_dim):
     elif model_name == "vgg":
         model = VGG()
 
-    elif model_name == "Resnet18":
+    elif model_name == "resnet18":
         model = Resnet18()
     elif model_name == "WideResnet":
         model = WideResnet()
@@ -84,7 +84,7 @@ class CNN(nn.Module):
         self.conv2 = nn.Sequential( nn.Conv2d(8, 16, (3,3), (2,2)),  nn.ReLU())
         self.conv3 = nn.Sequential( nn.Conv2d(16, 16, (3,3), (2,2)),  nn.ReLU())  
 
-        self.out = nn.Linear(16 * input_dim[-1]//16 * input_dim[-1]//16 , output_dim)
+        self.out = nn.Linear(16 * input_dim[-1]//16 * input_dim[-1]//16  , output_dim)
     
     def forward(self, x):
         x = self.conv1(x)
