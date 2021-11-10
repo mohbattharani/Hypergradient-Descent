@@ -87,8 +87,9 @@ b1=0.9
 b2=0.999
 eps=10**-8
 
-model_names = [{'name':'resnet18','input_dim': (3,32,32)},
-               {'name':'vgg','input_dim': (3,32,32)} 
+model_names = [{'name':'mlp','input_dim': (1,28,28)},
+               #{'name':'resnet18','input_dim': (3,32,32)},
+               #{'name':'vgg','input_dim': (3,32,32)} 
               ]
 
 # [{'name':'vgg','input_dim': [3,214,214]},
@@ -104,7 +105,7 @@ dataset_names = [{'name':'mnist', 'n_classes': 10},
                  {'name':'cifar10', 'n_classes': 10}, 
             ] 
 #dataset_names = [{'name':'cifar10', 'input_dim': [3,32,32]}]
-dataset_names = [{'name':'cifar10', 'n_classes': 10}]
+dataset_names = [{'name':'mnist', 'n_classes': 10}]
 
 all_logs = {}
 
