@@ -87,8 +87,8 @@ b1=0.9
 b2=0.999
 eps=10**-8
 
-model_names = [{'name':'mlp','input_dim': (1,28,28)},
-               #{'name':'resnet18','input_dim': (3,32,32)},
+model_names = [#{'name':'wideresnet','input_dim': (3,32,32)},
+               {'name':'resnet110','input_dim': (3,32,32)},
                #{'name':'vgg','input_dim': (3,32,32)} 
               ]
 
@@ -105,7 +105,7 @@ dataset_names = [{'name':'mnist', 'n_classes': 10},
                  {'name':'cifar10', 'n_classes': 10}, 
             ] 
 #dataset_names = [{'name':'cifar10', 'input_dim': [3,32,32]}]
-dataset_names = [{'name':'mnist', 'n_classes': 10}]
+dataset_names = [{'name':'cifar10', 'n_classes': 10}]
 
 all_logs = {}
 
@@ -152,9 +152,9 @@ for dataset_name in dataset_names:
             model_logs[0][opt_name+'_test_loss'] = logs['test_loss']
             model_logs[1][opt_name+'_lr'] = logs['lr']
         
-        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss')
+        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss',  xlabel='epochs', ylabel='loss')
         save_csv (model_logs[0], model_name['name'], dataset_name["name"]+ '_test_loss')
-        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+"_lr")
+        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+"_lr", xlabel='epochs', ylabel='lr')
         save_csv (model_logs[1], model_name['name'], dataset_name["name"]+"_lr")     
         
         

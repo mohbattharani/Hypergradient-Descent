@@ -18,7 +18,9 @@ def select_model (model_name, input_dim, output_dim):
 
     elif model_name == "resnet18":
         model = Resnet18()
-    elif model_name == "WideResnet":
+    elif model_name == "resnet101":
+        model = Resnet101()
+    elif model_name == "wideresnet":
         model = WideResnet()
         
     else:
@@ -101,6 +103,10 @@ def VGG ():
 
 def Resnet18():
     model = models.resnet18(pretrained=False)
+    return model
+
+def Resnet101():
+    model = models.resnet101(pretrained=False)
     return model
     
 def WideResnet():

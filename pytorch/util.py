@@ -6,7 +6,7 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 import torch
 
-def save_plot (logs, model_name, file_name, folder ='results'):
+def save_plot (logs, model_name, file_name, folder ='results', xlabel='epochs', ylabel='value'):
     
     if (not os.path.exists(folder)):
         os.mkdir(folder)
