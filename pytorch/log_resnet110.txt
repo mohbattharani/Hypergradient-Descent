@@ -1,0 +1,9 @@
+Training start on model: resnet101
+Files already downloaded and verified
+Files already downloaded and verified
+Logname: cifar10_sgd
+Logname: cifar10_sgdhd
+Logname: cifar10_sgdn
+Logname: cifar10_sgdnhd
+Logname: cifar10_adam
+Logname: cifar10_adamhd

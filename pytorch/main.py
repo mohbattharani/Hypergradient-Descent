@@ -87,8 +87,9 @@ b1=0.9
 b2=0.999
 eps=10**-8
 
-model_names = [#{'name':'wideresnet','input_dim': (3,32,32)},
-               {'name':'resnet110','input_dim': (3,32,32)},
+#{'name':'wideresnet','input_dim': (3,32,32)},
+model_names = [
+               {'name':'resnet101','input_dim': (3,32,32)},
                #{'name':'vgg','input_dim': (3,32,32)} 
               ]
 

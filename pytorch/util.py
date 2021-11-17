@@ -22,6 +22,8 @@ def save_plot (logs, model_name, file_name, folder ='results', xlabel='epochs', 
         # normalize so that visulization is readable.
         plt.plot(logs[k], label=k)
     plt.legend()
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.savefig (os.path.join( save_path+'.jpg'))
     
 
