@@ -87,10 +87,10 @@ b1=0.9
 b2=0.999
 eps=10**-8
 
-#{'name':'wideresnet','input_dim': (3,32,32)},
+#{'namer':'wideresnet','input_dim': (3,32,32)},
 model_names = [
-               {'name':'resnet101','input_dim': (3,32,32)},
-               #{'name':'vgg','input_dim': (3,32,32)} 
+               {'name':'resnet18','input_dim': (3,32,32)},
+               {'name':'resnet101','input_dim': (3,32,32)} 
               ]
 
 # [{'name':'vgg','input_dim': [3,214,214]},
@@ -106,7 +106,7 @@ dataset_names = [{'name':'mnist', 'n_classes': 10},
                  {'name':'cifar10', 'n_classes': 10}, 
             ] 
 #dataset_names = [{'name':'cifar10', 'input_dim': [3,32,32]}]
-dataset_names = [{'name':'cifar10', 'n_classes': 10}]
+dataset_names = [{'name':'cifar100', 'n_classes': 100}]
 
 all_logs = {}
 
@@ -120,7 +120,7 @@ for dataset_name in dataset_names:
 
     for model_name in model_names:
         print ("Training start on model:", model_name['name'])
-        model_logs = [{}, {}]
+        model_logs = [{}, {}, {}, {}]
          
 
         dataset_name['input_dim'] = model_name['input_dim']
@@ -151,11 +151,19 @@ for dataset_name in dataset_names:
             save_plot (logs, model_name['name'], log_name)
             save_csv (logs, model_name['name'], log_name)
             model_logs[0][opt_name+'_test_loss'] = logs['test_loss']
-            model_logs[1][opt_name+'_lr'] = logs['lr']
-        
-        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss',  xlabel='epochs', ylabel='loss')
+            model_logs[1][opt_name+'_test_acc'] = logs['test_acc']
+            model_logs[2][opt_name+'_train_loss'] = logs['train_loss']
+            model_logs[3][opt_name+'_lr'] = logs['lr']
+
+        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss',  xlabel='epochs', ylabel='Loss')
+        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+'_test_acc',  xlabel='epochs', ylabel='Acc')
+        save_plot (model_logs[2], model_name['name'], dataset_name["name"]+'_train_loss',  xlabel='epochs', ylabel='Loss')
+        save_plot (model_logs[3], model_name['name'], dataset_name["name"]+"_lr", xlabel='epochs', ylabel='lr')
+
         save_csv (model_logs[0], model_name['name'], dataset_name["name"]+ '_test_loss')
-        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+"_lr", xlabel='epochs', ylabel='lr')
-        save_csv (model_logs[1], model_name['name'], dataset_name["name"]+"_lr")     
+        save_csv (model_logs[1], model_name['name'], dataset_name["name"]+ '_test_acc')
+        save_csv (model_logs[2], model_name['name'], dataset_name["name"]+ '_train_loss')
+        save_csv (model_logs[3], model_name['name'], dataset_name["name"]+"_lr")     
         
+
         
