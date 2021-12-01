@@ -10,20 +10,20 @@ API: Pytorch
 
 # Instructions
 
-The pytorch/data folder contains the datasets used for training (MNIST and cifar-10). Results of our experiments are located in the pytorch/results folder. 
-To reproduce all of the experiments, simply download all the files in the pytorch folder and run main.py as ``` python main.py ```.
+The `pytorch/data` folder contains the datasets used for training (`MNIST` and `CIFAR-10`). Results of our experiments are located in the `pytorch/results` folder. 
+To reproduce all of the experiments, simply download all the files in the pytorch folder and run `pytorch/main.py` as ``` python main.py ```.
 
 
-Pytorch optimizers for all of the Hypergradient Descent algorithms are located in pytorch/optimizers.py if you want to utilize these algorithms for your own purposes or to run your own experiments. They are normal pytorch optimizers that can simply be plugged in and used the same as you would use any normal pytorch optimizer. `optimizer.py` includes:
+Pytorch optimizers for all of the Hypergradient Descent algorithms are located in `pytorch/optimizers.py`, if you want to utilize these algorithms for your own purposes or to run your own experiments. They are normal pytorch optimizers that can simply be plugged in and used the same as you would use any normal pytorch optimizer. `pytorch/optimizer.py` includes:
   - `SGD` and `SGD-HD`
   - `SGDN` and `SGDN-HD`
   - `Adam` and `Adam-HD`
 
 
-To select which models, dataset or optimizers you want to use to regenerate the results, just add that dataset in the respcective files. ```model.py``` contains model `classes`, ```util.py``` has codes for dataloaders for datasets including `MNIST`, `CIFAR10` and `CIFAR100`. However, you can use your dataloader for your dataset(s). 
+To select which models, dataset or optimizers you want to use to regenerate the results, just add that dataset in the respcective files. ```pytorch/model.py``` contains model `classes`, ```pytorch/util.py``` has codes for dataloaders for datasets including `MNIST`, `CIFAR10` and `CIFAR100`. However, you can use your dataloader for your dataset(s). 
 
 
-```beta.py``` has the code that generates convergence trends for different values of `beta`. 
+```pytroch/beta.py``` has the code that generates convergence trends for different values of `beta`. 
 
 # Reference
 ```
