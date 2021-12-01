@@ -21,7 +21,7 @@ Pytorch optimizers for all of the Hypergradient Descent algorithms are located i
 To select which models, dataset or optimizers you want to use to regenerate the results, just add that dataset in the respcective files. ```model.py``` contains all model `classes`, ```util.py``` has codes for data loader generation, however you can use your dataloader for your dataset(s). 
 
 
-```beta.py``` has the code that generates convergence trends for different values of "$beta$". 
+```beta.py``` has the code that generates convergence trends for different values of `beta`. 
 
 # Reference
 ```
