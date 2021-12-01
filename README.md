@@ -22,7 +22,7 @@ Pytorch optimizers for all of the Hypergradient Descent algorithms are located i
 To select which models, dataset or optimizers you want to use to regenerate the results, just add that dataset in the respcective files. ```pytorch/model.py``` contains model `classes`, ```pytorch/util.py``` has codes for dataloaders for datasets including `MNIST`, `CIFAR10` and `CIFAR100`. However, you can use your dataloader for your dataset(s). 
 
 
-```pytroch/beta.py``` has the code that generates convergence trends for different values of `beta`. 
+```pytroch/beta.py``` has the code that generates convergence trends for different `beta` values. 
 
 # Reference
 ```
