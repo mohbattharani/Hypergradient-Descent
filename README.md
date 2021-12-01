@@ -10,12 +10,18 @@ API: Pytorch
 
 # Instructions
 
-The pytorch/data folder contains the datasets used for training (MNIST and cifar-10).
+The pytorch/data folder contains the datasets used for training (MNIST and cifar-10). Results of our experiments are located in the pytorch/results folder. 
 
-Results of our experiments are located in the pytorch/results folder. To reproduce all of the experiments, simply download all the files in the pytorch folder and run main.py.
+To reproduce all of the experiments, simply download all the files in the pytorch folder and run main.py as ``` python main.py ```.
+
 
 Pytorch optimizers for all of the Hypergradient Descent algorithms are located in pytorch/optimizers.py if you want to utilize these algorithms for your own purposes or to run your own experiments. They are normal pytorch optimizers that can simply be plugged in and used the same as you would use any normal pytorch optimizer.
 
+
+To select which models, dataset or optimizers you want to use to regenerate the results, just add that dataset in the respcective files. ```model.py``` contains all model `classes`, ```util.py``` has codes for data loader generation, however you can use your dataloader for your dataset(s). 
+
+
+```beta.py``` has the code that generates convergence trends for different values of "$beta$". 
 
 # Reference
 ```
