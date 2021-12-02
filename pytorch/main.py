@@ -101,6 +101,7 @@ model_names = [
                 {'name':'vgg','input_dim': (3,32,32)} 
               ]
 dataset_names = [
+                 {'name':'mnist', 'n_classes': 10}, 
                  {'name':'cifar10', 'n_classes': 10}, 
                  {'name':'cifar100', 'n_classes': 100}, 
             ] 
