@@ -119,7 +119,7 @@ for dataset_name in dataset_names:
 
     for model_name in model_names:
         print ("Training start on model:", model_name['name'])
-        model_logs = [{}, {}, {}]
+        model_logs = [{}, {}, {}, {}]
          
 
         dataset_name['input_dim'] = model_name['input_dim']
