@@ -1,5 +1,5 @@
 # Hypergradient-Descent
-##### Course Project: Machine Learning & Optimization (Fall-2021)
+##### Course Project: CSCI-6961/4961 Machine Learning & Optimization (Fall-2021)
 ###### Group: [Mohbat Tharani](http://mohbat.weebly.com/), [Momin Abbas](https://mominabbas.github.io/), Huzaifa Arif, [Tobias Park](https://kd2eom.github.io/), Xinyan Sun
 
 
