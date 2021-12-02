@@ -13,7 +13,7 @@ The `pytorch/data` folder contains the datasets used for training (`MNIST` and `
 To reproduce all of the experiments, simply download all the files in the pytorch folder and run `pytorch/main.py` as ``` python main.py ```.
 
 
-Pytorch optimizers for all of the Hypergradient Descent algorithms are located in `pytorch/optimizers.py`, if you want to utilize these algorithms for your own purposes or to run your own experiments. They are normal pytorch optimizers that can simply be plugged in and used the same as you would use any normal pytorch optimizer. `pytorch/optimizer.py` includes:
+Pytorch optimizers for all of the Hypergradient Descent algorithms are located in `pytorch/optimizers.py` if you want to utilize these algorithms for your own purposes or to run your own experiments. They are normal pytorch optimizers that can simply be plugged in and used in the same way as any normal pytorch optimizer. `pytorch/optimizer.py` includes:
   - `SGD` and `SGD-HD`
   - `SGDN` and `SGDN-HD`
   - `Adam` and `Adam-HD`
