@@ -27,6 +27,7 @@ def test (model, test_loader):
         
        	     correct+= (predicted == labels).sum()
        	     total+= labels.size(0)
+               
     
 
     accuracy = 100 * correct/total
@@ -56,6 +57,7 @@ def train (model, train_loader, test_loader, optimizer, criterion, epochs, test_
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+            
         
         #if (epoch%test_freq == 0):
         test_loss, test_acc = test (model, test_loader)
@@ -81,32 +83,29 @@ batch_size = 128
 output_dim = 10
 lr = 0.0001
 beta = 0.0001
-epoch = 100
+epoch = 1
 momentum = 0.5
 b1=0.9
 b2=0.999
 eps=10**-8
 
-#{'namer':'wideresnet','input_dim': (3,32,32)},
-model_names = [
-               {'name':'resnet18','input_dim': (3,32,32)},
-               {'name':'resnet101','input_dim': (3,32,32)} 
+# For Logistic Regression only
+model_names1 =[{'name':'LogisticRegression','input_dim': (1,28,28)}] ## skipped while training on cifar100
+dataset_names1 = [{'name':'mnist', 'n_classes': 10}]  # skipped temporarly 
+
+model_names = [ 
+                {'name':'mlp','input_dim': [3,32,32]},
+                {'name':'resnet18','input_dim': (3,32,32)},
+                {'name':'resnet101','input_dim': (3,32,32)},
+                {'name':'WideResnet','input_dim': (3,32,32)},
+                {'name':'vgg','input_dim': (3,32,32)} 
               ]
-
-# [{'name':'vgg','input_dim': [3,214,214]},
-#   {'name':'cnn','input_dim': [3,32,32]}, 
-#    {'name':'mlp','input_dim': [3,32,32]},
-#      {'name':'LogisticRegression','input_dim': [3,32,32]},
-#  ]
-
-#'cnn','vgg',]#,'cnn','vgg', 'LogisticRegression', 'mlp'] 
-
-opt_names = ['sgd', 'sgdhd', 'sgdn', 'sgdnhd', 'adam', 'adamhd']
-dataset_names = [{'name':'mnist', 'n_classes': 10}, 
+dataset_names = [
                  {'name':'cifar10', 'n_classes': 10}, 
+                 {'name':'cifar100', 'n_classes': 100}, 
             ] 
-#dataset_names = [{'name':'cifar10', 'input_dim': [3,32,32]}]
-dataset_names = [{'name':'cifar100', 'n_classes': 100}]
+            
+opt_names = ['sgd', 'sgdhd', 'sgdn', 'sgdnhd', 'adam', 'adamhd']
 
 all_logs = {}
 
@@ -120,7 +119,7 @@ for dataset_name in dataset_names:
 
     for model_name in model_names:
         print ("Training start on model:", model_name['name'])
-        model_logs = [{}, {}, {}, {}]
+        model_logs = [{}, {}, {}]
          
 
         dataset_name['input_dim'] = model_name['input_dim']
@@ -128,6 +127,7 @@ for dataset_name in dataset_names:
         train_loader, test_loader = data_loader (batch_size, dataset_name) 
         for opt_name in opt_names:
             model = models.select_model(model_name['name'],  model_name["input_dim"], dataset_name['n_classes'])
+            #print (model)
 
             if (opt_name == 'sgd'):
                 opt = SGD (model, lr)
@@ -151,19 +151,18 @@ for dataset_name in dataset_names:
             save_plot (logs, model_name['name'], log_name)
             save_csv (logs, model_name['name'], log_name)
             model_logs[0][opt_name+'_test_loss'] = logs['test_loss']
-            model_logs[1][opt_name+'_test_acc'] = logs['test_acc']
-            model_logs[2][opt_name+'_train_loss'] = logs['train_loss']
-            model_logs[3][opt_name+'_lr'] = logs['lr']
-
-        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss',  xlabel='epochs', ylabel='Loss')
-        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+'_test_acc',  xlabel='epochs', ylabel='Acc')
-        save_plot (model_logs[2], model_name['name'], dataset_name["name"]+'_train_loss',  xlabel='epochs', ylabel='Loss')
-        save_plot (model_logs[3], model_name['name'], dataset_name["name"]+"_lr", xlabel='epochs', ylabel='lr')
-
-        save_csv (model_logs[0], model_name['name'], dataset_name["name"]+ '_test_loss')
-        save_csv (model_logs[1], model_name['name'], dataset_name["name"]+ '_test_acc')
-        save_csv (model_logs[2], model_name['name'], dataset_name["name"]+ '_train_loss')
-        save_csv (model_logs[3], model_name['name'], dataset_name["name"]+"_lr")     
+            model_logs[1][opt_name+'_lr'] = logs['lr']
+            model_logs[2][opt_name+'_test_acc'] = logs['test_acc']
+            model_logs[3][opt_name+'_train_loss'] = logs['train_loss']
+            
         
-
+        save_plot (model_logs[0], model_name['name'], dataset_name["name"]+'_test_loss', ylabel = 'Test Loss')
+        save_csv (model_logs[0], model_name['name'], dataset_name["name"]+ '_test_loss')
+        save_plot (model_logs[1], model_name['name'], dataset_name["name"]+"_lr", ylabel = 'Learning Rate')
+        save_csv (model_logs[1], model_name['name'], dataset_name["name"]+"_lr")     
+        save_plot (model_logs[2], model_name['name'], dataset_name["name"]+'_test_acc', ylabel = 'Test Accuracy')
+        save_csv (model_logs[2], model_name['name'], dataset_name["name"]+ '_test_acc')
+        save_plot (model_logs[3], model_name['name'], dataset_name["name"]+'_train_loss', ylabel = 'Train Loss')
+        save_csv (model_logs[3], model_name['name'], dataset_name["name"]+ '_train_loss')
+        
         
