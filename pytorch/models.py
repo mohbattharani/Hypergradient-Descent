@@ -10,7 +10,7 @@ def select_model (model_name, input_dim, output_dim):
     if (model_name == 'mlp'):
         model = MLP(input_dim, output_dim)
     elif model_name == "LogisticRegression":
-        model = LogReg( input_dim, output_dim)
+        model = LogReg( input_dim, output_dim)asd
     elif model_name == 'cnn':
         model = CNN (input_dim, output_dim)
     elif model_name == "vgg":
