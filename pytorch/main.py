@@ -97,7 +97,7 @@ model_names = [
                 {'name':'mlp','input_dim': [3,32,32]},
                 {'name':'resnet18','input_dim': (3,32,32)},
                 {'name':'resnet101','input_dim': (3,32,32)},
-                {'name':'WideResnet','input_dim': (3,32,32)},
+                {'name':'wideresnet','input_dim': (3,32,32)},
                 {'name':'vgg','input_dim': (3,32,32)} 
               ]
 dataset_names = [
