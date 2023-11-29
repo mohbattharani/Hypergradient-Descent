@@ -1,6 +1,6 @@
 # Hypergradient-Descent
 ##### Course Project: [CSCI-6961/4961 Machine Learning & Optimization (Fall-2021)](https://www.cs.rpi.edu/~gittea/teaching/fall2021/mlandopt.html)
-###### Group: [Mohbat Tharani](http://mohbat.weebly.com/), [Momin Abbas](https://mominabbas.github.io/), Huzaifa Arif, [Tobias Park](https://kd2eom.github.io/), Xinyan Sun
+###### Group: [Mohbat Tharani](http://mohbat.weebly.com/),[Huzaifa Arif](https://huzaifa-arif.github.io),[Momin Abbas](https://mominabbas.github.io/), [Tobias Park](https://kd2eom.github.io/), Xinyan Sun
 
 
 
